@@ -1,5 +1,7 @@
 using CarRentalManagement.Server.Data;
+using CarRentalManagement.Server.IRepository;
 using CarRentalManagement.Server.Models;
+using CarRentalManagement.Server.Repository;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,8 +43,12 @@ namespace CarRentalManagement.Server
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

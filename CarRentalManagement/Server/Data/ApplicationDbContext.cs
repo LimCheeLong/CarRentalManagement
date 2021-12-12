@@ -38,5 +38,8 @@ namespace CarRentalManagement.Server.Data
             builder.ApplyConfiguration(new UserRoleSeedConfiguration());
             builder.ApplyConfiguration(new UserSeedConfiguration());
         }
+
+
+        public DbSet<CarRentalManagement.Shared.Domain.Make> Make { get; set; }
     }
 }
