@@ -7,7 +7,7 @@
 <hr />
 <br />
 
-<EditForm Model="@make" OnValidSubmit="CreateName">
+<EditForm Model="@make" OnValidSubmit="CreateMake">
     <DataAnnotationsValidator />
     <ValidationSummary />
     
@@ -40,7 +40,7 @@
         Colours = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
     }
 
-    private async Task CreateName()
+    private async Task CreateMake()
     {
         await _client.PostAsJsonAsync(Endpoints.MakesEndpoint, make);
         _navManager.NavigateTo("/makes/");

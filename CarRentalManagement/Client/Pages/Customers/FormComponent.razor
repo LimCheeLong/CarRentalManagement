@@ -1,13 +1,4 @@
-﻿@page "/customers/create/"
-@inject HttpClient _client
-@inject NavigationManager _navManager
-
-
-<h3 class="card-title">Create New Customer</h3>
-<hr />
-<br />
-
-<EditForm Model="@customer" OnValidSubmit="CreateCustomer">
+﻿<EditForm Model="@customer" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-group">
@@ -65,28 +56,12 @@
     </div>
 
     <button type="submit" class="btn btn-success btn-block">
-        Create Customer
+        @ButtonText
     </button>
-
+    <BackToList Target="customers" />
 </EditForm>
-
 @code {
-    Customer customer = new Customer();
-
-    private IList<Make> Makes;
-    private IList<Model> Models;
-    private IList<Colour> Colours;
-
-    protected async override Task OnInitializedAsync()
-    {
-        Makes = await _client.GetFromJsonAsync<List<Make>>($"{Endpoints.MakesEndpoint}");
-        Models = await _client.GetFromJsonAsync<List<Model>>($"{Endpoints.ModelsEndpoint}");
-        Colours = await _client.GetFromJsonAsync<List<Colour>>($"{Endpoints.ColoursEndpoint}");
-    }
-
-    private async Task CreateCustomer()
-    {
-        await _client.PostAsJsonAsync(Endpoints.CustomersEndpoint, customer);
-        _navManager.NavigateTo("/customers/");
-    }
+    [Parameter] public Customer customer { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
 }

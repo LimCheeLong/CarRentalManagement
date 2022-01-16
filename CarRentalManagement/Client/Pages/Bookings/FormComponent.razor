@@ -1,14 +1,5 @@
-﻿@page "/bookings/create/"
-@inject HttpClient _client
-@inject NavigationManager _navManager
-
-<h3 class="card-title">Create New Bookings</h3>
-<hr />
-<br />
-
-<br />
-
-<EditForm Model="@booking" OnValidSubmit="CreateBooking">
+﻿@inject HttpClient _client
+<EditForm Model="@booking" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
@@ -67,31 +58,21 @@
     }
 
     <button type="submit" class="btn btn-success btn-block">
-        Create Booking
+        @ButtonText
     </button>
+    <BackToList Target="bookings" />
+
 </EditForm>
+@code {
+    [Parameter] public Booking booking { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
 
-
-
-@code
-{
-    Booking booking = new Booking();
     private IList<Vehicle> Vehicles;
     private IList<Customer> Customers;
-
-
     protected async override Task OnInitializedAsync()
     {
         Vehicles = await _client.GetFromJsonAsync<List<Vehicle>>($"{Endpoints.VehiclesEndpoint}");
         Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
-
-
-
-    }
-
-    private async Task CreateBooking()
-    {
-        await _client.PostAsJsonAsync(Endpoints.BookingsEndpoint, booking);
-        _navManager.NavigateTo("/bookings/");
     }
 }
