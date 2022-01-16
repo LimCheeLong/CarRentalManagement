@@ -10,5 +10,8 @@ namespace CarRentalManagement.Shared.Domain
         public string ContactNumber { get; set; }
         public string EmailAddress { get; set; }
         public virtual List<Booking> Bookings { get; set; }
+        public string FirstName { get; set; }
+        public string Lastname { get; set; }
+
     }
 }
