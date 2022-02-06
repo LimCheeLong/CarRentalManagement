@@ -12,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using CarRentalManagement.Client.Components;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarRentalManagement.Server
 {
@@ -28,13 +30,16 @@ namespace CarRentalManagement.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(options =>
+                options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
@@ -42,13 +47,9 @@ namespace CarRentalManagement.Server
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-
             services.AddControllersWithViews().AddNewtonsoftJson(op => op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllersWithViews();
             services.AddRazorPages();
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
